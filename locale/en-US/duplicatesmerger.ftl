@@ -1,0 +1,33 @@
+duplicatesmerger-menu-root =
+    .label = Duplicates Merger
+duplicatesmerger-menu-settings =
+    .label = Settings
+duplicatesmerger-menu-smart =
+    .label = Smart merge items
+duplicatesmerger-menu-bulk =
+    .label = Bulk merge duplicates
+
+duplicatesmerger-settings-master = Master Selection Criteria
+duplicatesmerger-settings-master-oldest =
+    .label = Oldest (Date Added)
+duplicatesmerger-settings-master-newest =
+    .label = Newest (Date Added)
+duplicatesmerger-settings-master-creator =
+    .label = Longest Name of First Author
+duplicatesmerger-settings-mismatch = Type Mismatch Handling
+duplicatesmerger-settings-mismatch-skip =
+    .label = Skip
+duplicatesmerger-settings-mismatch-master =
+    .label = Change to Master's Type
+duplicatesmerger-settings-behavior = Merge Behavior
+duplicatesmerger-settings-delay = Delay between updates (milliseconds)
+duplicatesmerger-settings-skip-preview =
+    .label = Skip preview of smart merge results
+
+duplicatesmerger-progress-start-title = Merging Duplicates
+duplicatesmerger-progress-start = Total items to process: { $total }
+duplicatesmerger-progress-items = Items processed: { $processed } / { $total } ({ $remaining } remaining)
+duplicatesmerger-progress-complete-title = Duplicates Merge Complete
+duplicatesmerger-progress-complete = Operation completed successfully. { $processed } items were processed.
+duplicatesmerger-progress-interrupted-title = Duplicates Merge Interrupted
+duplicatesmerger-progress-interrupted = Operation stopped. { $processed } items were processed.

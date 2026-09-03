@@ -1,0 +1,14 @@
+{
+  "manifest_version": 2,
+  "name": "Duplicates Merger for Zotero",
+  "version": "2.0.0",
+  "description": "Merge duplicate Zotero items using configurable master-item rules.",
+  "author": "Fotos Frangoudes",
+  "applications": {
+    "zotero": {
+      "id": "frangoudes.fotos@gmail.com",
+      "strict_min_version": "10.0",
+      "strict_max_version": "10.0.*"
+    }
+  }
+}
