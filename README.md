@@ -35,7 +35,8 @@ Open **Tools → Duplicates Merger → Settings** to choose:
 
 Bulk merge uses Zotero's own duplicate detection and merge operation. Review
 the Duplicate Items collection first and keep a current backup before running
-it across a large library.
+it across a large library. Leave the Duplicate Items collection to stop an
+active bulk merge.
 
 ## Build and test
 

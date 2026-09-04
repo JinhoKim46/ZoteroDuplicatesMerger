@@ -1,4 +1,5 @@
 const assert = require("node:assert/strict");
+const crypto = require("node:crypto");
 const fs = require("node:fs");
 const path = require("node:path");
 const { spawnSync } = require("node:child_process");
@@ -64,6 +65,17 @@ test("bootstrap registers native menus and the settings pane", async () => {
     "main/menubar/tools",
     "main/library/item",
   ]);
+  const itemMenu = menuOptions[1].menus[0];
+  const visibility = [];
+  const menuContext = {
+    items: [{}],
+    collectionTreeRows: [{ isDuplicates: () => true }],
+    setVisible: value => visibility.push(value),
+  };
+  itemMenu.onShowing(null, menuContext);
+  itemMenu.menus[0].onShowing(null, menuContext);
+  itemMenu.menus[1].onShowing(null, menuContext);
+  assert.deepEqual(visibility, [true, false, true]);
   assert.deepEqual(insertedLocales, ["duplicatesmerger.ftl"]);
   context.shutdown();
   assert.equal(stopped, true);
@@ -85,28 +97,46 @@ test("Zotero 10 package resources replace legacy overlays", () => {
 
 test("build creates a clean Zotero 10 XPI", () => {
   const archive = path.join(root, "ZoteroDuplicatesMerger-2.0.0.xpi");
-  const build = spawnSync("sh", ["build.sh"], {
+  const readme = path.join(root, "README.md");
+  const originalTimes = fs.statSync(readme);
+  const build = () => spawnSync("sh", ["build.sh"], {
     cwd: root,
     encoding: "utf8",
   });
-  assert.equal(build.status, 0, build.stderr || build.stdout);
-  assert.equal(fs.existsSync(archive), true);
 
-  const unzip = spawnSync("unzip", ["-Z1", archive], { encoding: "utf8" });
-  assert.equal(unzip.status, 0, unzip.stderr);
-  const files = unzip.stdout.trim().split("\n");
-  for (const file of [
-    "manifest.json",
-    "bootstrap.js",
-    "prefs.js",
-    "chrome/content/scripts/zoteroduplicatesmerger.js",
-    "chrome/content/preferences.xhtml",
-    "locale/en-US/duplicatesmerger.ftl",
-  ]) {
-    assert.equal(files.includes(file), true, file);
+  try {
+    const firstBuild = build();
+    assert.equal(firstBuild.status, 0, firstBuild.stderr || firstBuild.stdout);
+    assert.equal(fs.existsSync(archive), true);
+    const firstHash = crypto.createHash("sha256").update(fs.readFileSync(archive)).digest("hex");
+
+    fs.utimesSync(readme, new Date("2030-01-01"), new Date("2030-01-01"));
+    const secondBuild = build();
+    assert.equal(secondBuild.status, 0, secondBuild.stderr || secondBuild.stdout);
+    const secondHash = crypto.createHash("sha256").update(fs.readFileSync(archive)).digest("hex");
+    assert.equal(secondHash, firstHash);
+
+    const unzip = spawnSync("unzip", ["-Z1", archive], { encoding: "utf8" });
+    assert.equal(unzip.status, 0, unzip.stderr);
+    const files = unzip.stdout.trim().split("\n");
+    for (const file of [
+      "manifest.json",
+      "bootstrap.js",
+      "prefs.js",
+      "chrome/content/scripts/zoteroduplicatesmerger.js",
+      "chrome/content/preferences.xhtml",
+      "locale/en-US/duplicatesmerger.ftl",
+    ]) {
+      assert.equal(files.includes(file), true, file);
+    }
+    for (const file of ["install.rdf", "update.rdf", "chrome.manifest"]) {
+      assert.equal(files.includes(file), false, file);
+    }
   }
-  for (const file of ["install.rdf", "update.rdf", "chrome.manifest"]) {
-    assert.equal(files.includes(file), false, file);
+  finally {
+    fs.utimesSync(readme, originalTimes.atime, originalTimes.mtime);
+    if (fs.existsSync(archive)) {
+      fs.unlinkSync(archive);
+    }
   }
-  fs.unlinkSync(archive);
 });

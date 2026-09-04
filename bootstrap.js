@@ -50,11 +50,15 @@ async function startup({ id, rootURI }) {
     menus: [{
       menuType: "submenu",
       l10nID: "duplicatesmerger-menu-root",
-      onShowing: (_event, context) => context.setVisible(context.items.length > 1),
+      onShowing: (_event, context) => context.setVisible(
+        context.items.length > 1
+          || context.collectionTreeRows?.[0]?.isDuplicates() === true,
+      ),
       menus: [
         {
           menuType: "menuitem",
           l10nID: "duplicatesmerger-menu-smart",
+          onShowing: (_event, context) => context.setVisible(context.items.length > 1),
           onCommand: (_event, context) => DuplicatesMerger.smartMerge(getPane(context)),
         },
         {
