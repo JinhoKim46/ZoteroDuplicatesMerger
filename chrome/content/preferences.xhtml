@@ -1,0 +1,35 @@
+<vbox xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+      xmlns:html="http://www.w3.org/1999/xhtml">
+  <linkset>
+    <html:link rel="localization" href="duplicatesmerger.ftl"/>
+  </linkset>
+
+  <groupbox>
+    <label><html:h2 data-l10n-id="duplicatesmerger-settings-master"/></label>
+    <radiogroup preference="extensions.duplicatesmerger.master">
+      <radio data-l10n-id="duplicatesmerger-settings-master-oldest" value="oldest"/>
+      <radio data-l10n-id="duplicatesmerger-settings-master-newest" value="newest"/>
+      <radio data-l10n-id="duplicatesmerger-settings-master-creator" value="creator"/>
+    </radiogroup>
+  </groupbox>
+
+  <groupbox>
+    <label><html:h2 data-l10n-id="duplicatesmerger-settings-mismatch"/></label>
+    <radiogroup preference="extensions.duplicatesmerger.typemismatch">
+      <radio data-l10n-id="duplicatesmerger-settings-mismatch-skip" value="skip"/>
+      <radio data-l10n-id="duplicatesmerger-settings-mismatch-master" value="master"/>
+    </radiogroup>
+  </groupbox>
+
+  <groupbox>
+    <label><html:h2 data-l10n-id="duplicatesmerger-settings-behavior"/></label>
+    <html:label>
+      <html:span data-l10n-id="duplicatesmerger-settings-delay"/>
+      <html:input type="number"
+                  min="0"
+                  preference="extensions.duplicatesmerger.delay"/>
+    </html:label>
+    <checkbox data-l10n-id="duplicatesmerger-settings-skip-preview"
+              preference="extensions.duplicatesmerger.skippreview"/>
+  </groupbox>
+</vbox>
